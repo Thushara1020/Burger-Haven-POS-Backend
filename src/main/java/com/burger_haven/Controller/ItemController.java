@@ -6,10 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/items")
-@CrossOrigin("http://localhost:4200")
+@CrossOrigin(origins = "http://localhost:4200")
 public class ItemController {
 
     @Autowired
@@ -30,9 +31,18 @@ public class ItemController {
         return itemService.getItemById(id);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public String deleteItem(@PathVariable Long id) {
         itemService.deleteItem(id);
         return "Item deleted successfully!";
+    }
+    @PutMapping("/update-status/{id}")
+    public Item updateItemStatus(@PathVariable Long id, @RequestBody Map<String, String> statusUpdate) {
+        Item item = itemService.getItemById(id);
+        if (item != null) {
+            item.setStatus(statusUpdate.get("status"));
+            return itemService.saveItem(item);
+        }
+        return null;
     }
 }
