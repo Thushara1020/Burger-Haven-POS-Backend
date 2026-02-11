@@ -21,4 +21,5 @@ public class Item {
     private String image;
     private String status;
     private Double price;
+    private String filter;
 }
